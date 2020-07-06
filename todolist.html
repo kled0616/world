@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app" class="container my-3">
+        <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="basic-addon1">待辦事項</span>
+        </div>
+        <input type="text" class="form-control" placeholder="準備要做的任務" v-model="newTodo" @keyup.enter="addTodo">
+        <div class="input-group-append">
+            <button class="btn btn-primary" type="button" @click="addTodo">新增</button>
+        </div>
+        </div>
+        <div class="card text-center">
+        <div class="card-header">
+            <ul class="nav nav-tabs card-header-tabs">
+            <li class="nav-item">
+                <a class="nav-link" :class="{'active' : page == 'all'}" 
+                @click.prevent="page = 'all'"  href="#">全部</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" :class="{'active' : page == 'ing'}"
+                @click.prevent="page = 'ing'" href="#">進行中</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" :class="{'active' : page == 'finish'}" 
+                @click.prevent="page = 'finish'" href="#">已完成</a>
+            </li>
+            </ul>
+        </div>
+        <ul class="list-group list-group-flush text-left">
+            <li class="list-group-item" v-for="(item, idx) in pageTodoList"
+                @dblclick="editTodo(item)">
+            <div class="d-flex" v-if="item.id != editId">
+                <div class="form-check">
+                <input type="checkbox" class="form-check-input" 
+                        :id="item.id" v-model="item.isComplete">
+                <label class="form-check-label" 
+                        :class="{'completed' : item.isComplete}" :for="item.id">
+                    {{item.title}}
+                </label>
+                </div>
+                <button type="button" class="close ml-auto" aria-label="Close" @click="delTodo(item)">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <input type="text" class="form-control" v-if="item.id == editId"
+                    @keyup.esc="cancelEdit()"
+                    @keyup.enter="saveEdit(item)"
+                    v-model="newTitle">
+            </li>
+        </ul>
+        <div class="card-footer d-flex justify-content-between">
+            <span>還有 {{IngTodos}} 筆任務未完成</span>
+            <a href="#" @click="TodoList = []">清除所有任務</a>
+        </div>
+        </div>
+    </div>
+    <script src="./js/todolist.js"></script>
+</body>
+
+</html>
